@@ -5,16 +5,23 @@
  */
 
 // Components
-import App from './App.vue'
+import App from "./App.vue";
 
 // Composables
-import { createApp } from 'vue'
+import { createApp } from "vue";
+import router from "@/router";
 
 // Plugins
-import { registerPlugins } from '@/plugins'
+import { registerPlugins } from "@/plugins";
+import { createPinia } from "pinia";
 
-const app = createApp(App)
+import Vue3EasyDataTable from "vue3-easy-data-table";
+import "vue3-easy-data-table/dist/style.css";
 
-registerPlugins(app)
+const app = createApp(App);
 
-app.mount('#app')
+registerPlugins(app);
+app.component("EasyDataTable", Vue3EasyDataTable);
+app.use(router);
+app.use(createPinia());
+app.mount("#app");
