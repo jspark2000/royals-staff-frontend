@@ -8,6 +8,10 @@ export const axiosInstance = axios.create({
 
 if (import.meta.env.MODE === "production") {
   axiosInstance.defaults.baseURL = import.meta.env.VITE_API_URL;
+  axiosInstance.interceptors.request.use((request) => {
+    request.url = request.url?.replace("/api", "");
+    return request;
+  });
 }
 
 axiosInstance.interceptors.response.use(
