@@ -6,6 +6,10 @@ export const axiosInstance = axios.create({
   withCredentials: true,
 });
 
+if (import.meta.env.MODE === "production") {
+  axiosInstance.defaults.baseURL = import.meta.env.VITE_API_URL;
+}
+
 axiosInstance.interceptors.response.use(
   (response) => {
     return response;
