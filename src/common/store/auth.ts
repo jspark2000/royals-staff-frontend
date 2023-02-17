@@ -40,7 +40,7 @@ export const useAuthStore = defineStore("auth", {
           code,
         });
         axiosInstance.defaults.headers.common.Authorization =
-          res.headers.Authorization;
+          res.headers.authorization;
         this.isLoggedIn = true;
       } catch (e) {
         throw new Error("Login failed");
@@ -62,9 +62,9 @@ export const useAuthStore = defineStore("auth", {
     async reissue(origin: any) {
       try {
         const res = await axiosInstance.get("/api/auth/reissue");
-        origin.headers.Authorization = res.headers.Authorization;
+        origin.headers.Authorization = res.headers.authorization;
         axiosInstance.defaults.headers.common.Authorization =
-          res.headers.Authorization;
+          res.headers.authorization;
         this.isLoggedIn = true;
       } catch (e) {
         this.isLoggedIn = false;
