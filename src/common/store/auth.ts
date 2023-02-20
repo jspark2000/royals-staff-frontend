@@ -43,7 +43,7 @@ export const useAuthStore = defineStore("auth", {
           res.headers.authorization;
         console.log(res.headers);
         console.log(res);
-        const test = await axiosInstance.post("/api/test/");
+        const test = await axiosInstance.get("/api/test/");
         console.log(test);
         this.isLoggedIn = true;
       } catch (e) {
