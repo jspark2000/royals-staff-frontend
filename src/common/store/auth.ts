@@ -25,6 +25,7 @@ axiosInstance.interceptors.response.use(
       await useAuthStore().reissue(origin);
       return axiosInstance(origin);
     }
+    useAuthStore().$state.isLoggedIn = false;
     return Promise.reject(error);
   }
 );
