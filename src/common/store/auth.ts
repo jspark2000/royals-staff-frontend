@@ -42,6 +42,9 @@ export const useAuthStore = defineStore("auth", {
         axiosInstance.defaults.headers.common.authorization =
           res.headers.authorization;
         console.log(res.headers);
+        console.log(res);
+        const test = await axiosInstance.post("/api/test/");
+        console.log(test);
         this.isLoggedIn = true;
       } catch (e) {
         throw new Error("Login failed");
