@@ -39,8 +39,9 @@ export const useAuthStore = defineStore("auth", {
         const res = await axiosInstance.post("/api/auth/login/callback", {
           code,
         });
-        axiosInstance.defaults.headers.common.Authorization =
+        axiosInstance.defaults.headers.common.authorization =
           res.headers.authorization;
+        console.log(res.headers);
         this.isLoggedIn = true;
       } catch (e) {
         throw new Error("Login failed");
@@ -50,10 +51,10 @@ export const useAuthStore = defineStore("auth", {
     async logout() {
       try {
         await axiosInstance.post("/api/auth/logout");
-        delete axiosInstance.defaults.headers.common.Authorization;
+        delete axiosInstance.defaults.headers.common.authorization;
         this.isLoggedIn = false;
       } catch (e) {
-        delete axiosInstance.defaults.headers.common.Authorization;
+        delete axiosInstance.defaults.headers.common.authorization;
         this.isLoggedIn = false;
         throw new Error("Logout failed");
       }
@@ -63,8 +64,8 @@ export const useAuthStore = defineStore("auth", {
       try {
         const res = await axiosInstance.get("/api/auth/reissue");
         console.log(res.headers)
-        origin.headers.Authorization = res.headers.authorization;
-        axiosInstance.defaults.headers.common.Authorization =
+        origin.headers.authorization = res.headers.authorization;
+        axiosInstance.defaults.headers.common.authorization =
           res.headers.authorization;
         this.isLoggedIn = true;
       } catch (e) {
