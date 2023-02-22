@@ -1,12 +1,12 @@
 <template>
-  <v-container class="fill-height px-10">
+  <v-container class="fill-height px-5">
     <v-responsive class="d-flex text-center fill-height mt-3">
-      <v-img contain height="150" src="@/assets/intro.svg" />
-      <div class="text-h5 font-weight-black mt-5 text-amber-darken-1">
+      <v-img contain height="130" src="@/assets/intro.svg" />
+      <div class="text-h6 font-weight-black mt-5 text-amber-darken-1">
         성균관대학교 미식축구부 로얄스
       </div>
 
-      <h1 class="text-subtitle-1 font-weight-bold text-grey-darken-1">
+      <h1 class="text-subtitle-2 font-weight-bold text-grey-darken-1">
         2023년도 신입부원 모집
       </h1>
 
@@ -64,7 +64,7 @@
     </v-responsive>
     <div class="text-center">
       <v-dialog v-model="dialog">
-        <v-card class="text-center mx-15">
+        <v-card class="text-center">
           <v-card-text>
             <h3 class="mb-3">SKKU ROYALS RECORDS</h3>
             2022년도 전국 대회 우승<br />
