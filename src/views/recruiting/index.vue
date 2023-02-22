@@ -11,7 +11,7 @@
       </h1>
 
       <v-row class="d-flex align-content-center justify-center">
-        <v-col cols="12" class="mt-5">
+        <v-col cols="12" class="mt-5 py-2">
           <v-btn
             prepend-icon="fa-brands fa-facebook"
             size="large"
@@ -22,7 +22,18 @@
             >FACEBOOK</v-btn
           >
         </v-col>
-        <v-col cols="12" class="">
+        <v-col cols="12" class="py-2">
+          <v-btn
+            prepend-icon="fa-brands fa-youtube"
+            size="large"
+            rounded="lg"
+            class="bg-amber-accent-2 text-white"
+            block
+            href="https://www.youtube.com/@skkuroyals1258"
+            >HIGHLIGHTS</v-btn
+          >
+        </v-col>
+        <v-col cols="12" class="py-2">
           <v-btn
             prepend-icon="fa-brands fa-instagram"
             size="large"
@@ -33,62 +44,137 @@
             >INSTAGRAM</v-btn
           >
         </v-col>
-        <v-col cols="12" class="">
+        <v-col cols="12" class="py-2">
           <v-btn
-            prepend-icon="fa-brands fa-youtube"
+            prepend-icon="fas fa-person"
             size="large"
             rounded="lg"
             class="bg-blue-accent-2"
+            @click="fbti = true"
             block
-            href="https://www.youtube.com/@skkuroyals1258"
-            >HIGHLIGHTS</v-btn
+            >FBTI (풋볼TI)</v-btn
           >
         </v-col>
-        <v-col cols="12" class="">
+        <v-col cols="12" class="py-2">
           <v-btn
             prepend-icon="fas fa-trophy"
             size="large"
             rounded="lg"
             class="bg-deep-purple-accent-2"
             block
-            @click="() => (dialog = !dialog)"
+            @click="() => (records = !records)"
             >RECORDS</v-btn
           >
         </v-col>
-      </v-row>
-      <v-footer
-        ><v-col class="text-center mt-4" cols="12">
+        <v-col cols="12" class="py-2">
+          <v-btn
+            prepend-icon="fas fa-envelope"
+            size="large"
+            rounded="lg"
+            class="bg-cyan-accent-4 text-white"
+            block
+            @click="() => (contact = !contact)"
+            >CONTACT</v-btn
+          >
+        </v-col>
+        <v-col class="text-center mt-1" cols="12">
           © {{ new Date().getFullYear() }} <strong>SKKU ROYALS</strong>
-        </v-col></v-footer
-      >
+        </v-col>
+      </v-row>
     </v-responsive>
     <div class="text-center">
-      <v-dialog v-model="dialog">
+      <v-dialog v-model="records">
         <v-card class="text-center">
-          <v-card-text>
-            <h3 class="mb-3">SKKU ROYALS RECORDS</h3>
+          <v-card-text class="font-weight-regular">
+            <h3 class="mb-3 font-weight-black">
+              <v-icon
+                class="fas fa-football text-brown-darken-1"
+                size="20px"
+              ></v-icon>
+              SKKU ROYALS RECORDS
+            </h3>
+            <v-icon
+              icon="fas fa-medal"
+              class="text-amber-darken-1"
+              size="17px"
+            ></v-icon>
             2022년도 전국 대회 우승<br />
+            <v-icon
+              icon="fas fa-medal"
+              class="text-amber-darken-1"
+              size="17px"
+            ></v-icon>
             2022년도 서울지역 추계 대회 우승<br />
+            <v-icon
+              icon="fas fa-medal"
+              class="text-amber-darken-1"
+              size="17px"
+            ></v-icon>
             2022년도 서울지역 춘계 대회 우승<br />
+            <v-icon
+              icon="fas fa-medal"
+              class="text-grey-darken-1"
+              size="17px"
+            ></v-icon>
             2021년도 서울지역 추계 대회 준우승<br />
-            2019년도 전국 대회 준우승<br />
+            <v-icon
+              icon="fas fa-medal"
+              class="text-amber-darken-1"
+              size="17px"
+            ></v-icon>
+            2019년도 전국 대회 우승<br />
+            <v-icon
+              icon="fas fa-medal"
+              class="text-amber-darken-1"
+              size="17px"
+            ></v-icon>
             2019년도 서울지역 춘계 대회 우승<br />
           </v-card-text>
           <v-card-actions>
             <v-btn
               block
               class="bg-amber-accent-3 text-white"
-              @click="dialog = false"
+              @click="records = false"
+              >닫기</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="contact">
+        <v-card class="text-center">
+          <v-card-text class="font-weight-regular">
+            <h3 class="mb-3 font-weight-black">
+              <v-icon
+                class="fas fa-football text-brown-darken-1"
+                size="20px"
+              ></v-icon>
+              CONTACT US
+            </h3>
+            <v-icon icon="fas fa-phone" size="15px"></v-icon>
+            010-9756-6847<br />
+            <v-icon icon="fa-brands fa-instagram" size="17px"></v-icon>
+            skku_royals_1957<br />
+          </v-card-text>
+          <v-card-actions>
+            <v-btn
+              block
+              class="bg-lime-darken-1 text-white"
+              @click="contact = false"
               >닫기</v-btn
             >
           </v-card-actions>
         </v-card>
       </v-dialog>
     </div>
+    <v-snackbar v-model="fbti" :timeout="2000" color="error" elevation="24">
+      준비중인 기능입니다.
+    </v-snackbar>
   </v-container>
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue";
-const dialog = ref(false);
+const records = ref(false);
+const contact = ref(false);
+const fbti = ref(false);
 </script>
