@@ -5,6 +5,8 @@ import DefaultView from "@/layouts/default/Default.vue";
 import LandingView from "@/views/index.vue";
 import LoginView from "@/views/login.vue";
 import CallbackView from "@/views/auth/login.vue";
+import RecruitingView from "@/views/recruiting/index.vue";
+
 const routes = [
   {
     path: "/",
@@ -24,6 +26,11 @@ const routes = [
         path: "/login/callback",
         name: "callbackPage",
         component: CallbackView,
+      },
+      {
+        path: "/recruiting",
+        name: "recruitingPage",
+        component: RecruitingView,
       },
     ],
   },
@@ -99,7 +106,7 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-  const publicPages = ["/", "/login", "/login/callback"];
+  const publicPages = ["/", "/login", "/login/callback", "/recruiting"];
   const authRequired = !publicPages.includes(to.path);
   const auth = useAuthStore();
 
