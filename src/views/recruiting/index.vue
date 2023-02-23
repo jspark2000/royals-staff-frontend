@@ -185,7 +185,7 @@
         <v-carousel-item
           v-for="(cardnewsUrl, i) in cardnewsUrls"
           :key="i"
-          :src="cardnewsUrl"
+          :src="cardnewsUrl.src"
         >
           <!-- <v-sheet height="100%" class="px-5 my-0 py-0" title>
             <div class="d-flex fill-height justify-center align-center">
@@ -206,15 +206,15 @@ const fbti = ref(false);
 const cardnews = ref(false);
 
 const cardnewsUrls = ref([
-  "src/assets/cardnews/001.png",
-  "src/assets/cardnews/002.png",
-  "src/assets/cardnews/003.png",
-  "src/assets/cardnews/004.png",
-  "src/assets/cardnews/005.png",
-  "src/assets/cardnews/006.png",
-  "src/assets/cardnews/007.png",
-  "src/assets/cardnews/008.png",
-  "src/assets/cardnews/009.png",
-  "src/assets/cardnews/010.png",
+  { src: "/cardnews/001.png" },
+  { src: "/cardnews/002.png" },
+  { src: "/cardnews/003.png" },
+  { src: "/cardnews/004.png" },
+  { src: "/cardnews/005.png" },
+  { src: "/cardnews/006.png" },
+  { src: "/cardnews/007.png" },
+  { src: "/cardnews/008.png" },
+  { src: "/cardnews/009.png" },
+  { src: "/cardnews/010.png" },
 ]);
 </script>
