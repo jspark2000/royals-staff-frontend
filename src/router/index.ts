@@ -110,8 +110,15 @@ router.beforeEach(async (to) => {
   const authRequired = !publicPages.includes(to.path);
   const auth = useAuthStore();
 
+  const loginControl = ["/", "/login", "/login/callback"];
+  const authNotRequired = loginControl.includes(to.path);
+
   if (authRequired && !auth.isLoggedIn) {
     return "/";
+  }
+
+  if (authNotRequired && auth.isLoggedIn) {
+    return "/home";
   }
 });
 
