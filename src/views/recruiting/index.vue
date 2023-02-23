@@ -1,4 +1,7 @@
 <template>
+  <v-snackbar v-model="fbti" :timeout="2000" color="error">
+    준비중인 기능입니다.
+  </v-snackbar>
   <v-container class="fill-height px-5">
     <v-responsive class="d-flex text-center fill-height mt-3">
       <v-img contain height="130" src="@/assets/intro.svg" />
@@ -64,6 +67,17 @@
             block
             @click="() => (records = !records)"
             >RECORDS</v-btn
+          >
+        </v-col>
+        <v-col cols="12" class="py-2">
+          <v-btn
+            prepend-icon="fas fa-newspaper"
+            size="large"
+            rounded="lg"
+            class="bg-orange-accent-3 text-white"
+            block
+            @click="() => (cardnews = !cardnews)"
+            >CARD NEWS</v-btn
           >
         </v-col>
         <v-col cols="12" class="py-2">
@@ -166,9 +180,21 @@
         </v-card>
       </v-dialog>
     </div>
-    <v-snackbar v-model="fbti" :timeout="2000" color="error" elevation="24">
-      준비중인 기능입니다.
-    </v-snackbar>
+    <v-dialog v-model="cardnews">
+      <v-carousel hide-delimiters show-arrows="hover" cycle interval="3000">
+        <v-carousel-item
+          v-for="(cardnewsUrl, i) in cardnewsUrls"
+          :key="i"
+          :src="cardnewsUrl"
+        >
+          <!-- <v-sheet height="100%" class="px-5 my-0 py-0" title>
+            <div class="d-flex fill-height justify-center align-center">
+              <v-img :src="cardnewsUrl"></v-img>
+            </div>
+          </v-sheet> -->
+        </v-carousel-item>
+      </v-carousel>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -177,4 +203,18 @@ import { ref } from "vue";
 const records = ref(false);
 const contact = ref(false);
 const fbti = ref(false);
+const cardnews = ref(false);
+
+const cardnewsUrls = ref([
+  "src/assets/cardnews/001.png",
+  "src/assets/cardnews/002.png",
+  "src/assets/cardnews/003.png",
+  "src/assets/cardnews/004.png",
+  "src/assets/cardnews/005.png",
+  "src/assets/cardnews/006.png",
+  "src/assets/cardnews/007.png",
+  "src/assets/cardnews/008.png",
+  "src/assets/cardnews/009.png",
+  "src/assets/cardnews/010.png",
+]);
 </script>
