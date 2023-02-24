@@ -1,7 +1,4 @@
 <template>
-  <v-snackbar v-model="fbti" :timeout="2000" color="error">
-    준비중인 기능입니다.
-  </v-snackbar>
   <v-container class="fill-height px-5">
     <v-responsive class="d-flex text-center fill-height mt-3">
       <v-img contain height="130" src="@/assets/intro.svg" />
@@ -64,7 +61,7 @@
             size="large"
             rounded="lg"
             class="bg-blue-accent-2"
-            @click="fbti = true"
+            to="/recruiting/fbti"
             block
             >FBTI (풋볼TI)</v-btn
           >
@@ -173,11 +170,6 @@
           :key="i"
           :src="cardnewsUrl.src"
         >
-          <!-- <v-sheet height="100%" class="px-5 my-0 py-0" title>
-            <div class="d-flex fill-height justify-center align-center">
-              <v-img :src="cardnewsUrl"></v-img>
-            </div>
-          </v-sheet> -->
         </v-carousel-item>
       </v-carousel>
     </v-dialog>
@@ -187,8 +179,6 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 const records = ref(false);
-const contact = ref(false);
-const fbti = ref(false);
 const cardnews = ref(false);
 
 const cardnewsUrls = ref([
