@@ -274,7 +274,7 @@ const scores = [
   ],
 ];
 
-const descriptions = {
+const descriptions: any = {
   스태프:
     "섬세함을 지닌 당신! 미식축구부의 운영을 책임지는 스태프로 활동해보는 것은 어떤까요?",
   쿼터백:
