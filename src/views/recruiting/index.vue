@@ -32,8 +32,19 @@
             rounded="lg"
             class="bg-amber-accent-2 text-white"
             block
-            href="https://www.youtube.com/@skkuroyals1258"
+            href="https://youtu.be/7VaA41gZgAE"
             >HIGHLIGHTS</v-btn
+          >
+        </v-col>
+        <v-col cols="12" class="py-2">
+          <v-btn
+            prepend-icon="fa-brands fa-youtube"
+            size="large"
+            rounded="lg"
+            class="bg-amber-accent-2 text-white"
+            block
+            href="https://youtu.be/sYT4eKDSgXo"
+            >ROSTER</v-btn
           >
         </v-col>
         <v-col cols="12" class="py-2">
@@ -86,8 +97,8 @@
             size="large"
             rounded="lg"
             class="bg-cyan-accent-4 text-white"
+            href="https://forms.gle/ywwo8QS4iyhs4mA89"
             block
-            @click="() => (contact = !contact)"
             >CONTACT</v-btn
           >
         </v-col>
@@ -149,31 +160,6 @@
               block
               class="bg-amber-accent-3 text-white"
               @click="records = false"
-              >닫기</v-btn
-            >
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-      <v-dialog v-model="contact">
-        <v-card class="text-center">
-          <v-card-text class="font-weight-regular">
-            <h3 class="mb-3 font-weight-black">
-              <v-icon
-                class="fas fa-football text-brown-darken-1"
-                size="20px"
-              ></v-icon>
-              CONTACT US
-            </h3>
-            <v-icon icon="fas fa-phone" size="15px"></v-icon>
-            010-9756-6847<br />
-            <v-icon icon="fa-brands fa-instagram" size="17px"></v-icon>
-            skku_royals_1957<br />
-          </v-card-text>
-          <v-card-actions>
-            <v-btn
-              block
-              class="bg-lime-darken-1 text-white"
-              @click="contact = false"
               >닫기</v-btn
             >
           </v-card-actions>
