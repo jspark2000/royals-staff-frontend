@@ -164,7 +164,7 @@
       </v-dialog>
     </div>
     <v-dialog v-model="cardnews">
-      <v-carousel hide-delimiters show-arrows="hover" cycle interval="3000">
+      <v-carousel hide-delimiters show-arrows="hover" cycle interval="5000">
         <v-carousel-item
           v-for="(cardnewsUrl, i) in cardnewsUrls"
           :key="i"
@@ -191,6 +191,5 @@ const cardnewsUrls = ref([
   { src: "/cardnews/007.png" },
   { src: "/cardnews/008.png" },
   { src: "/cardnews/009.png" },
-  { src: "/cardnews/010.png" },
 ]);
 </script>
