@@ -157,6 +157,7 @@ const attendance = ref([
   ["출석등록", "/attendance/register"],
   ["출석명단 조회", "/attendance/list"],
   ["출석체크", "/attendance/check"],
+  ["출석삭제", "/attendance/delete"],
 ]);
 
 const game = ref([
