@@ -22,9 +22,9 @@
             >
               <template #item-location="item">
                 {{
-                  item.location === "integrated"
+                  item.location === "Integrated"
                     ? "통합"
-                    : item.location === "suwon"
+                    : item.location === "Suwon"
                     ? "율전"
                     : "명륜"
                 }}
@@ -269,9 +269,9 @@ async function getCheckModal(item: AttendanceDTO) {
   targetName.value = item.name;
   targetStudentNo.value = item.studentNo;
   targetLocation.value =
-    item.location === "integrated"
+    item.location === "Integrated"
       ? "통합"
-      : item.location === "seoul"
+      : item.location === "Seoul"
       ? "명륜"
       : "율전";
   actualAttendance.value = item.late ? "늦참" : item.survey ? "참석" : "불참";
@@ -296,10 +296,10 @@ async function checkAttendance() {
     id: targetId.value,
     location:
       targetLocation.value === "통합"
-        ? "integrated"
+        ? "Integrated"
         : targetLocation.value === "명륜"
-        ? "seoul"
-        : "suwon",
+        ? "Seoul"
+        : "Suwon",
     late: actualAttendance.value === "늦참" ? true : false,
     survey: actualAttendance.value === "불참" ? false : true,
     checked: true,
