@@ -23,7 +23,7 @@
                     <v-select
                       :label="dateColumn"
                       v-model="dateInfo[index].location"
-                      :items="['통합', '명륜', '율전']"
+                      :items="['통합', '개별']"
                       :rules="[(v) => !!v || '필수 입력 항목입니다']"
                     />
                   </v-col>
@@ -89,6 +89,7 @@
               ></v-autocomplete>
               <v-select
                 :items="targetColumns"
+                v-model="reasonColumn"
                 :rules="[(v) => !!v || '필수선택 항목입니다']"
                 label="불참사유를 나타내는 컬럼 선택*"
                 class="mt-2"
@@ -260,6 +261,7 @@ function openForm(item: GoogleSheet) {
 const nameColumn = ref();
 const studentNoColumn = ref();
 const dateColumns = ref();
+const reasonColumn = ref();
 const form = ref();
 
 async function checkForm() {
@@ -284,7 +286,6 @@ async function selectDates() {
 
 const dialogDates = ref(false);
 const dateInfo = ref();
-
 const formDates = ref();
 
 async function checkDateForm() {
@@ -314,10 +315,11 @@ async function check() {
         location:
           target[0].location === "통합"
             ? "integrated"
-            : target[0].location === "명륜"
+            : item[dateColumn].includes("명륜")
             ? "seoul"
             : "suwon",
         date: target[0].date,
+        reason: item[reasonColumn.value],
       });
     });
   });

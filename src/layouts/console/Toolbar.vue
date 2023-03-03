@@ -151,6 +151,7 @@ async function logout() {
 const people = ref([
   ["부원명단", "/people/list"],
   ["부원등록", "/people/register"],
+  ["부원삭제", "/people/delete"],
 ]);
 
 const attendance = ref([
