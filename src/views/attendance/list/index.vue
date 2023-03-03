@@ -37,9 +37,9 @@
               </template>
               <template #item-location="item">
                 {{
-                  item.location === "integrated"
+                  item.location === "Integrated"
                     ? "통합"
-                    : item.location === "suwon"
+                    : item.location === "Suwon"
                     ? "율전"
                     : "명륜"
                 }}

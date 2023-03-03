@@ -314,14 +314,15 @@ async function check() {
         late: item[dateColumn].includes("늦참") ? true : false,
         location:
           target[0].location === "통합"
-            ? "integrated"
+            ? "Integrated"
             : item[dateColumn].includes("명륜")
-            ? "seoul"
-            : "suwon",
+            ? "Seoul"
+            : "Suwon",
         date: target[0].date,
         reason: item[reasonColumn.value],
       });
     });
+    console.log(registerPayload);
   });
 
   loading.value = true;
