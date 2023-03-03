@@ -313,7 +313,7 @@ async function check() {
         survey: item[dateColumn].includes("불참") ? false : true,
         late: item[dateColumn].includes("늦참") ? true : false,
         location:
-          target[0].location === "통합"
+          target[0].location === "통합" || item[dateColumn].includes("불참")
             ? "Integrated"
             : item[dateColumn].includes("명륜")
             ? "Seoul"

@@ -10,6 +10,13 @@
               >| {{ attendanceDate }}</v-card-subtitle
             ></v-card-title
           >
+          <v-tabs v-model="tab" bg-color="white">
+            <v-tab value="ALL" @click="filterLocation('Integrated')"
+              >통합</v-tab
+            >
+            <v-tab value="STAFF" @click="filterLocation('Seoul')">명륜</v-tab>
+            <v-tab value="QB" @click="filterLocation('Suwon')">율전</v-tab>
+          </v-tabs>
           <v-card-text class="font-weight-medium mt-lg-3">
             <EasyDataTable
               :headers="attendanceHeaders"
@@ -47,9 +54,9 @@
               <template #item-check="item">
                 <v-btn
                   :class="{ 'd-none': item.checked }"
-                  class="bg-amber-darken-1 text-white"
+                  class="bg-teal-darken-2 text-white"
                   @click="getCheckModal(item)"
-                  icon="fas fa-pencil"
+                  icon="fas fa-check-double"
                   rounded="lg"
                   size="x-small"
                 ></v-btn>
@@ -82,7 +89,7 @@
               </template>
               <template #item-select="item">
                 <v-btn
-                  class="bg-red-darken-2"
+                  class="bg-green-darken-2"
                   @click="getAttendances(item)"
                   icon="fas fa-pencil"
                   rounded="lg"
@@ -95,7 +102,7 @@
       </v-col>
     </v-row>
     <v-dialog v-model="checkModal" width="auto">
-      <v-sheet width="300" class="mx-auto pa-10">
+      <v-sheet width="350" class="mx-auto pa-10">
         <h5 class="text-h6 font-weight-bold mb-5">출석체크</h5>
         <v-form @submit.prevent @submit="checkAttendance()">
           <v-text-field
@@ -129,11 +136,11 @@
             label="실제출석"
             :items="['참석', '늦참', '불참']"
           ></v-select>
-          <v-btn type="submit" block class="bg-amber-lighten-2">체크하기</v-btn>
+          <v-btn type="submit" block class="bg-indigo-darken-2">체크하기</v-btn>
           <v-btn
             @click="() => (checkModal = false)"
             block
-            class="mt-3 bg-green-lighten-2"
+            class="mt-3 bg-amber-darken-2 text-white"
             >뒤로가기</v-btn
           >
         </v-form>
@@ -327,6 +334,18 @@ async function checkAttendance() {
   }
   checkModal.value = false;
   resultModal.value = true;
+}
+
+const tab = ref("Integrated");
+
+function filterLocation(location: string) {
+  if (location === "Integrated") {
+    filteredAttendanceItems.value = attendanceItems.value;
+  } else {
+    filteredAttendanceItems.value = attendanceItems.value.filter(
+      (attendance) => attendance.location === location
+    );
+  }
 }
 </script>
 
