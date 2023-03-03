@@ -87,9 +87,9 @@
               </template>
               <template #item-select="item">
                 <v-btn
-                  class="bg-red-darken-2"
+                  class="bg-blue-darken-2"
                   @click="getAttendances(item)"
-                  icon="fas fa-pencil"
+                  icon="fas fa-magnifying-glass"
                   rounded="lg"
                   size="x-small"
                 ></v-btn>
