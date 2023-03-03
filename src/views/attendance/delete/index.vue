@@ -156,6 +156,8 @@ async function deleteAttendance() {
         return false;
       });
 
+    console.log(result);
+
     if (result) {
       items.value = items.value.filter(
         (item) => item.date.slice(0, 10) !== targetDate.value

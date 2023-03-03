@@ -65,6 +65,11 @@ const routes = [
         name: "people-register",
         component: () => import("@/views/people/register/index.vue"),
       },
+      {
+        path: "delete",
+        name: "people-delete",
+        component: () => import("@/views/people/delete/index.vue"),
+      },
     ],
   },
   {

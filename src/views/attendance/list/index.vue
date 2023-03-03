@@ -33,7 +33,7 @@
               alternating
             >
               <template #expand="item">
-                <div style="padding: 15px">불참사유 {{ item.id }}</div>
+                <div style="padding: 15px">{{ item.reason }}</div>
               </template>
               <template #item-location="item">
                 {{
@@ -161,6 +161,7 @@ type AttendanceDTO = {
   studentNo: number;
   location: string;
   survey: boolean;
+  reason: string;
   late: boolean;
   offPosition: string;
   defPosition: string;
