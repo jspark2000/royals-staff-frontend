@@ -4,7 +4,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import DefaultView from "@/layouts/default/Default.vue";
 import LandingView from "@/views/index.vue";
 import LoginView from "@/views/login.vue";
-import CallbackView from "@/views/auth/login.vue";
+import CallbackView from "@/views/auth/index.vue";
 import RecruitingView from "@/views/recruiting/index.vue";
 import FBTIView from "@/views/recruiting/fbti/index.vue";
 
@@ -47,7 +47,7 @@ const routes = [
       {
         path: "",
         name: "home",
-        component: () => import("@/views/Home.vue"),
+        component: () => import("@/views/home/index.vue"),
       },
     ],
   },

@@ -37,4 +37,14 @@ export default createVuetify({
   components: {
     ...labs,
   },
+  display: {
+    mobileBreakpoint: "md",
+    thresholds: {
+      xs: 0,
+      sm: 600,
+      md: 960,
+      lg: 1264,
+      xl: 1904,
+    },
+  },
 });
