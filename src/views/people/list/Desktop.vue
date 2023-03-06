@@ -2,7 +2,7 @@
   <bread-crumb :title="title" :items="breadcumbs" :icon="icon" />
   <v-responsive class="d-flex px-10 py-5">
     <v-row>
-      <v-col cols="12">
+      <v-col cols="8">
         <v-card class="pa-2" elevation="3">
           <v-card-title class="text-indigo-darken-4"
             >부원 명단 테이블
@@ -30,8 +30,8 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-dialog v-model="modal" width="auto">
-      <v-sheet width="300" class="mx-auto pa-10">
+    <v-dialog v-model="modal">
+      <v-sheet width="300" class="mx-auto pa-10 w-50">
         <v-form @submit.prevent @submit="updatePeople()">
           <v-text-field
             v-model="targetId"

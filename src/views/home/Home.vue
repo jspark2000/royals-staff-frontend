@@ -112,35 +112,6 @@
           </v-card>
         </v-hover>
       </v-col>
-      <v-col cols="12" md="8">
-        <v-card class="pa-2" elevation="3">
-          <v-card-title class="text-indigo-darken-4"
-            >나의 출석
-            <v-card-subtitle class="d-inline px-0"
-              >| 최근 5회</v-card-subtitle
-            ></v-card-title
-          >
-          <v-card-text class="font-weight-medium mt-lg-3">
-            <EasyDataTable
-              :headers="headers"
-              :items="items"
-              table-class-name="attendance-table"
-              theme-color="#1d90ff"
-              show-index
-              alternating
-            >
-              <template #item-attendance="item">
-                <v-chip
-                  size="small"
-                  class="font-weight-bold text-white"
-                  :class="calculateColor(item.attendance)"
-                  >{{ item.attendance }}</v-chip
-                >
-              </template>
-            </EasyDataTable>
-          </v-card-text>
-        </v-card>
-      </v-col>
     </v-row>
   </v-responsive>
 </template>
@@ -149,40 +120,6 @@
 import { ref, watchEffect } from "vue";
 import BreadCrumb from "@/components/Breadcrumbs.vue";
 import { axiosInstance } from "@/common/store/auth";
-import type { Header } from "vue3-easy-data-table";
-import EasyDataTable from "vue3-easy-data-table";
-
-function calculateColor(attendance: string) {
-  return attendance === "불참"
-    ? "bg-red-darken-3"
-    : attendance === "늦참"
-    ? "bg-amber-darken-2"
-    : "bg-green-darken-3";
-}
-
-const headers: Header[] = [
-  { text: "운동날짜", value: "date", sortable: true },
-  { text: "위치", value: "location", sortable: true },
-  { text: "출결", value: "attendance", sortable: true },
-];
-
-const items = ref([]);
-
-watchEffect(async () => {
-  const attendances = await axiosInstance
-    .get("/api/attendance/recent")
-    .then((result) => {
-      return result.data;
-    })
-    .catch((error) => {
-      console.log(error);
-      return false;
-    });
-
-  if (attendances) {
-    items.value = attendances.attendances;
-  }
-});
 
 const role = ref();
 const userNickname = ref();
@@ -215,24 +152,3 @@ const breadcumbs = ref([
   },
 ]);
 </script>
-
-<style>
-.attendance-table {
-  --easy-table-header-font-size: 15px;
-  --easy-table-header-height: 50px;
-  --easy-table-header-item-padding: 10px 15px;
-
-  --easy-table-body-row-height: 50px;
-  --easy-table-body-row-font-size: 14px;
-  --easy-table-body-row-font-weight: 700;
-
-  --easy-table-body-row-hover-font-color: #e8eaf6;
-  --easy-table-body-row-hover-background-color: #3949ab;
-
-  --easy-table-body-item-padding: 10px 15px;
-
-  --easy-table-rows-per-page-selector-width: 70px;
-  --easy-table-rows-per-page-selector-option-padding: 10px;
-  --easy-table-rows-per-page-selector-z-index: 1;
-}
-</style>

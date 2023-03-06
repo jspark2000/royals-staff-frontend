@@ -62,7 +62,6 @@ export const useAuthStore = defineStore("auth", {
     async reissue(origin: any) {
       try {
         const res = await axiosInstance.get("/api/auth/reissue");
-        console.log(res.headers);
         origin.headers.authorization = res.headers.authorization;
         axiosInstance.defaults.headers.common.authorization =
           res.headers.authorization;
