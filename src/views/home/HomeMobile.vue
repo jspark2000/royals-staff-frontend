@@ -124,7 +124,7 @@
             <EasyDataTable
               :headers="headers"
               :items="items"
-              table-class-name="attendance-table"
+              table-class-name="attendance-table-mo"
               theme-color="#1d90ff"
               show-index
               alternating
@@ -217,7 +217,7 @@ const breadcumbs = ref([
 </script>
 
 <style>
-.attendance-table {
+.attendance-table-mo {
   --easy-table-header-font-size: 12px;
   --easy-table-header-height: 30px;
   --easy-table-header-item-padding: 10px 10px;
@@ -234,7 +234,7 @@ const breadcumbs = ref([
   --easy-table-rows-per-page-selector-option-padding: 10px;
   --easy-table-rows-per-page-selector-z-index: 1;
 }
-.attendance-table .v-chip {
+.attendance-table-mo .v-chip {
   font-size: 0.5rem;
 }
 </style>
