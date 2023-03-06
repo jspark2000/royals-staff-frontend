@@ -34,8 +34,8 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-dialog v-model="modal" width="auto">
-      <v-sheet class="mx-auto pa-10">
+    <v-dialog v-model="modal">
+      <v-sheet class="mx-auto pa-10 w-100">
         <v-form @submit.prevent @submit="updatePeople()">
           <v-text-field
             v-model="targetId"

@@ -114,6 +114,17 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/role",
+    component: () => import("@/layouts/console/Default.vue"),
+    children: [
+      {
+        path: "update",
+        name: "role-update",
+        component: () => import("@/views/role/index.vue"),
+      },
+    ],
+  },
 ];
 
 const router = createRouter({

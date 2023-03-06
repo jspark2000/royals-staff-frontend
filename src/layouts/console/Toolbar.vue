@@ -109,6 +109,25 @@
           :to="url"
         ></v-list-item>
       </v-list-group>
+
+      <v-list-group value="role">
+        <template v-slot:activator="{ props }">
+          <v-list-item v-bind="props">
+            <template v-slot:prepend>
+              <v-icon icon="fas fa-user-lock" size="16px"></v-icon>
+            </template>
+            <v-list-item-title class="font-weight-medium"
+              >권한관리</v-list-item-title
+            >
+          </v-list-item>
+        </template>
+        <v-list-item
+          v-for="([title, url], i) in role"
+          :key="i"
+          :title="title"
+          :to="url"
+        ></v-list-item>
+      </v-list-group>
     </v-list>
     <template v-slot:append>
       <div class="pa-2">
@@ -165,6 +184,8 @@ const game = ref([
   ["시합정보 등록", "/game/register"],
   ["시합결과 조회", "/game/list"],
 ]);
+
+const role = ref([["권한변경", "/role/update"]]);
 </script>
 
 <style>
