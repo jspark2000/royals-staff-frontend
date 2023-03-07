@@ -274,8 +274,12 @@ async function getAttendances(item: AttendanceDatesDTO) {
 
   if (attendances) {
     attendanceDate.value = item.date.slice(0, 10);
-    attendanceItems.value = attendances;
-    filteredAttendanceItems.value = [...attendances];
+    attendanceItems.value = attendances.filter(
+      (attendance) => !attendance.checked
+    );
+    filteredAttendanceItems.value = [
+      ...attendances.filter((attendance) => !attendance.checked),
+    ];
     attendanceCheckTable.value = false;
   }
 }
