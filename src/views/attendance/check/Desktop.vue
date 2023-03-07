@@ -275,8 +275,12 @@ async function getAttendances(item: AttendanceDatesDTO) {
 
   if (attendances) {
     attendanceDate.value = item.date.slice(0, 10);
-    attendanceItems.value = attendances;
-    filteredAttendanceItems.value = [...attendances];
+    attendanceItems.value = attendances.filter(
+      (attendance) => !attendance.checked
+    );
+    filteredAttendanceItems.value = [
+      ...attendances.filter((attendance) => !attendance.checked),
+    ];
     attendanceCheckTable.value = false;
   }
 }
@@ -350,8 +354,11 @@ async function checkAttendance() {
     });
 
   if (result) {
-    attendanceItems.value.forEach((item) =>
-      item.id === result.id ? (item.checked = true) : ""
+    attendanceItems.value = attendanceItems.value.filter(
+      (attendance) => attendance.id !== result.id
+    );
+    filteredAttendanceItems.value = filteredAttendanceItems.value.filter(
+      (attendance) => attendance.id !== result.id
     );
     checkResult.value = "success";
     checkTitle.value = "성공";
