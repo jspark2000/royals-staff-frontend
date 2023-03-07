@@ -12,7 +12,7 @@
           >
           <v-tabs v-model="tab" bg-color="white">
             <v-tab value="Integrated" @click="filterLocation('Integrated')"
-              >통합</v-tab
+              >전체</v-tab
             >
             <v-tab value="Seoul" @click="filterLocation('Seoul')">명륜</v-tab>
             <v-tab value="Suwon" @click="filterLocation('Suwon')">율전</v-tab>
@@ -63,6 +63,13 @@
                 ></v-btn>
               </template>
             </EasyDataTable>
+            <v-btn
+              prepend-icon="fas fa-print"
+              rounded="lg"
+              class="bg-deep-purple-darken-1 mt-5"
+              @click="issueDailyReport()"
+              >엑셀파일로 내보내기</v-btn
+            >
           </v-card-text>
         </v-card>
       </v-col>
@@ -102,7 +109,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-dialog v-model="checkModal" width="auto">
+    <v-dialog v-model="checkModal">
       <v-sheet class="mx-auto pa-10 w-100">
         <h5 class="text-h6 font-weight-bold mb-5">출석체크</h5>
         <v-form @submit.prevent @submit="checkAttendance()">
@@ -157,9 +164,8 @@
         :type="checkResult"
         :title="checkTitle"
         :text="checkText"
-        width="60%"
         border
-        class="align-self-center"
+        class="align-self-center px-10 w-100"
       >
         <v-row class="mt-2">
           <v-col>
@@ -170,6 +176,23 @@
         </v-row>
       </v-alert>
     </v-dialog>
+    <v-dialog width="auto" v-model="invalid">
+      <v-card class="pt-3">
+        <v-card-title class="text-center text-amber-accent-2">
+          <v-icon
+            class="align-center"
+            icon="fas fa-triangle-exclamation"
+            size="large"
+          ></v-icon>
+        </v-card-title>
+        <v-card-text class="text-center">
+          {{ errorMessage }}
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" block @click="invalid = false">확인</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-responsive>
 </template>
 
@@ -179,6 +202,10 @@ import BreadCrumb from "@/components/Breadcrumbs.vue";
 import { axiosInstance } from "@/common/store/auth";
 import { Header } from "vue3-easy-data-table";
 import EasyDataTable from "vue3-easy-data-table";
+import ExcelJS from "exceljs";
+
+const invalid = ref(false);
+const errorMessage = ref("알 수 없는 오류 발생");
 
 axiosInstance
   .get("/api/attendance/date-list")
@@ -322,8 +349,11 @@ async function checkAttendance() {
     });
 
   if (result) {
-    attendanceItems.value.forEach((item) =>
-      item.id === result.id ? (item.checked = true) : ""
+    attendanceItems.value = attendanceItems.value.filter(
+      (attendance) => attendance.id !== result.id
+    );
+    filteredAttendanceItems.value = filteredAttendanceItems.value.filter(
+      (attendance) => attendance.id !== result.id
     );
     checkResult.value = "success";
     checkTitle.value = "성공";
@@ -350,6 +380,76 @@ function filterLocation(location: string) {
     filteredAttendanceItems.value = attendanceItems.value.filter(
       (attendance) => attendance.location === location
     );
+  }
+}
+
+async function issueDailyReport() {
+  const result = await axiosInstance
+    .get(`/api/attendance/report/${attendanceDate.value}`)
+    .then((result) => result.data)
+    .catch((error) => {
+      if (error.response.status === 400) {
+        errorMessage.value = error.response.data.message;
+      }
+      invalid.value = true;
+    });
+
+  if (result) {
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = "staff-team";
+    workbook.lastModifiedBy = "staff-team";
+    workbook.created = new Date();
+    workbook.modified = new Date();
+    const worksheetA = workbook.addWorksheet("재학생(선수)");
+    const worksheetS = workbook.addWorksheet("재학생(스태프)");
+    const worksheetN = workbook.addWorksheet("신입생(전체)");
+
+    const columns = [
+      {
+        header: "이름",
+        key: "name",
+      },
+      {
+        header: "학번",
+        key: "studentNo",
+      },
+      {
+        header: "출석 캠퍼스",
+        key: "location",
+      },
+      {
+        header: "실제출석",
+        key: "result",
+      },
+    ];
+
+    worksheetA.columns = columns;
+    worksheetS.columns = columns;
+    worksheetN.columns = columns;
+
+    worksheetA.insertRows(
+      2,
+      result.filter((item: any) => item.newbie === "재학생" && !item.staff)
+    );
+    worksheetS.insertRows(
+      2,
+      result.filter((item: any) => item.newbie === "재학생" && item.staff)
+    );
+    worksheetN.insertRows(
+      2,
+      result.filter((item: any) => item.newbie === "신입생")
+    );
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    const url = window.URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `${attendanceDate.value} 출석체크결과.xlsx`;
+    anchor.click();
+    window.URL.revokeObjectURL(url);
   }
 }
 </script>

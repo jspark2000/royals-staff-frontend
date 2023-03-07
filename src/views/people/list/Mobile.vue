@@ -56,6 +56,18 @@
             label="입학년도"
           ></v-text-field>
           <v-select
+            v-model="newbie"
+            variant="outlined"
+            label="구분"
+            :items="['재학생', '신입생']"
+          ></v-select>
+          <v-select
+            v-model="absence"
+            variant="outlined"
+            label="상태"
+            :items="['재학', '휴학']"
+          ></v-select>
+          <v-select
             v-model="offPosition"
             variant="outlined"
             label="오펜스포지션"
@@ -106,6 +118,8 @@ const successModal = ref(false);
 const targetId = ref();
 const name = ref();
 const studentNo = ref();
+const newbie = ref();
+const absence = ref();
 const offPosition = ref();
 const defPosition = ref();
 const splPosition = ref();
@@ -135,6 +149,8 @@ type PeopleResponseDTO = {
   id: number;
   name: string;
   studentNo: number;
+  newbie: boolean;
+  absence: boolean;
   offPosition: string;
   defPosition: string;
   splPosition: string;
@@ -158,6 +174,8 @@ async function getPeopleModal(item: PeopleResponseDTO) {
     targetId.value = item.id;
     name.value = result.name;
     studentNo.value = result.studentNo;
+    newbie.value = result.newbie ? "신입생" : "재학생";
+    absence.value = result.absence ? "휴학" : "재학";
     offPosition.value = result.offPosition;
     defPosition.value = result.defPosition;
     splPosition.value = result.splPosition;
@@ -169,6 +187,8 @@ async function updatePeople() {
   const updateDTO = {
     name: name.value,
     studentNo: studentNo.value,
+    newbie: newbie.value === "재학생" ? false : true,
+    absence: absence.value === "재학" ? false : true,
     offPosition: offPosition.value,
     defPosition: defPosition.value,
     splPosition: splPosition.value,

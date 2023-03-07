@@ -56,7 +56,7 @@
             v-model="role"
             variant="outlined"
             label="권한"
-            :items="['Newbie', 'Normal', 'Admin']"
+            :items="['Newbie', 'Normal']"
           ></v-select>
           <v-btn type="submit" block class="bg-amber-lighten-2">수정하기</v-btn>
           <v-btn
