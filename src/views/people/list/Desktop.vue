@@ -2,7 +2,7 @@
   <bread-crumb :title="title" :items="breadcumbs" :icon="icon" />
   <v-responsive class="d-flex px-10 py-5">
     <v-row>
-      <v-col cols="8">
+      <v-col cols="10">
         <v-card class="pa-2" elevation="3">
           <v-card-title class="text-indigo-darken-4"
             >부원 명단 테이블
@@ -20,6 +20,9 @@
               show-index
               alternating
             >
+              <template #item-newbie="item">
+                {{ item.newbie ? "신입생" : "재학생" }}
+              </template>
               <template #item-modify="item">
                 <v-btn @click="getPeopleModal(item)" class="bg-amber-lighten-2"
                   ><v-icon icon="fas fa-pencil" size="12px"></v-icon
@@ -51,6 +54,18 @@
             type="number"
             label="입학년도"
           ></v-text-field>
+          <v-select
+            v-model="newbie"
+            variant="outlined"
+            label="구분"
+            :items="['재학생', '신입생']"
+          ></v-select>
+          <v-select
+            v-model="absence"
+            variant="outlined"
+            label="상태"
+            :items="['재학', '휴학']"
+          ></v-select>
           <v-select
             v-model="offPosition"
             variant="outlined"
@@ -102,6 +117,8 @@ const successModal = ref(false);
 const targetId = ref();
 const name = ref();
 const studentNo = ref();
+const newbie = ref();
+const absence = ref();
 const offPosition = ref();
 const defPosition = ref();
 const splPosition = ref();
@@ -124,6 +141,7 @@ const items: Ref<PeopleResponseDTO[]> = ref([]);
 const headers: Header[] = [
   { text: "이름", value: "name", sortable: true },
   { text: "입학년도", value: "studentNo", sortable: true },
+  { text: "구분", value: "newbie", sortable: true },
   { text: "오펜스", value: "offPosition", sortable: true },
   { text: "디펜스", value: "defPosition", sortable: true },
   { text: "스페셜", value: "splPosition", sortable: true },
@@ -134,6 +152,8 @@ type PeopleResponseDTO = {
   id: number;
   name: string;
   studentNo: number;
+  newbie: boolean;
+  absence: boolean;
   offPosition: string;
   defPosition: string;
   splPosition: string;
@@ -157,6 +177,8 @@ async function getPeopleModal(item: PeopleResponseDTO) {
     targetId.value = item.id;
     name.value = result.name;
     studentNo.value = result.studentNo;
+    newbie.value = result.newbie ? "신입생" : "재학생";
+    absence.value = result.absence ? "휴학" : "재학";
     offPosition.value = result.offPosition;
     defPosition.value = result.defPosition;
     splPosition.value = result.splPosition;
@@ -168,6 +190,8 @@ async function updatePeople() {
   const updateDTO = {
     name: name.value,
     studentNo: studentNo.value,
+    newbie: newbie.value === "재학생" ? false : true,
+    absence: absence.value === "재학" ? false : true,
     offPosition: offPosition.value,
     defPosition: defPosition.value,
     splPosition: splPosition.value,
