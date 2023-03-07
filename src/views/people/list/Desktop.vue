@@ -23,84 +23,11 @@
               <template #item-newbie="item">
                 {{ item.newbie ? "신입생" : "재학생" }}
               </template>
-              <template #item-modify="item">
-                <v-btn @click="getPeopleModal(item)" class="bg-amber-lighten-2"
-                  ><v-icon icon="fas fa-pencil" size="12px"></v-icon
-                ></v-btn>
-              </template>
             </EasyDataTable>
           </v-card-text>
         </v-card>
       </v-col>
     </v-row>
-    <v-dialog v-model="modal">
-      <v-sheet width="300" class="mx-auto pa-10 w-50">
-        <v-form @submit.prevent @submit="updatePeople()">
-          <v-text-field
-            v-model="targetId"
-            variant="outlined"
-            label="id"
-            disabled
-          ></v-text-field>
-          <v-text-field
-            v-model="name"
-            variant="outlined"
-            label="이름"
-            clearable
-          ></v-text-field>
-          <v-text-field
-            v-model="studentNo"
-            variant="outlined"
-            type="number"
-            label="입학년도"
-          ></v-text-field>
-          <v-select
-            v-model="newbie"
-            variant="outlined"
-            label="구분"
-            :items="['재학생', '신입생']"
-          ></v-select>
-          <v-select
-            v-model="absence"
-            variant="outlined"
-            label="상태"
-            :items="['재학', '휴학']"
-          ></v-select>
-          <v-select
-            v-model="offPosition"
-            variant="outlined"
-            label="오펜스포지션"
-            :items="['STAFF', 'QB', 'OL', 'WR', 'RB']"
-          ></v-select>
-          <v-select
-            v-model="defPosition"
-            variant="outlined"
-            label="디펜스포지션"
-            :items="['STAFF', 'DL', 'LB', 'CB', 'HYB']"
-          ></v-select>
-          <v-select
-            v-model="splPosition"
-            variant="outlined"
-            label="스페셜포지션"
-            :items="['STAFF', 'NORMAL', 'KICKER', 'RETURNER', 'SNAPPER']"
-          ></v-select>
-          <v-btn type="submit" block class="bg-amber-lighten-2">수정하기</v-btn>
-          <v-btn @click="closeModal()" block class="mt-3 bg-green-lighten-2"
-            >뒤로가기</v-btn
-          >
-        </v-form>
-      </v-sheet>
-    </v-dialog>
-    <v-dialog v-model="errorModal" width="auto">
-      <v-alert type="error" title="ERROR" border>
-        요청을 처리하는중 오류가 발생했습니다.
-      </v-alert>
-    </v-dialog>
-    <v-dialog v-model="successModal" width="auto">
-      <v-alert type="success" title="SUCCESS" border>
-        성공적으로 업데이트 했습니다.
-      </v-alert>
-    </v-dialog>
   </v-responsive>
 </template>
 
@@ -110,18 +37,6 @@ import BreadCrumb from "@/components/Breadcrumbs.vue";
 import { axiosInstance } from "@/common/store/auth";
 import { Header } from "vue3-easy-data-table";
 import EasyDataTable from "vue3-easy-data-table";
-
-const modal = ref(false);
-const errorModal = ref(false);
-const successModal = ref(false);
-const targetId = ref();
-const name = ref();
-const studentNo = ref();
-const newbie = ref();
-const absence = ref();
-const offPosition = ref();
-const defPosition = ref();
-const splPosition = ref();
 
 const season = ref(new Date().getFullYear());
 const icon = ref("fas fa-people-group");
@@ -145,7 +60,6 @@ const headers: Header[] = [
   { text: "오펜스", value: "offPosition", sortable: true },
   { text: "디펜스", value: "defPosition", sortable: true },
   { text: "스페셜", value: "splPosition", sortable: true },
-  { text: "수정", value: "modify" },
 ];
 
 type PeopleResponseDTO = {
@@ -158,67 +72,6 @@ type PeopleResponseDTO = {
   defPosition: string;
   splPosition: string;
 };
-
-function closeModal() {
-  modal.value = false;
-}
-
-async function getPeopleModal(item: PeopleResponseDTO) {
-  const id = item.id;
-  const result: PeopleResponseDTO = await axiosInstance
-    .get(`/api/admin/people/${id}`)
-    .then((result) => result.data)
-    .catch((error) => {
-      console.log(error);
-      errorModal.value = true;
-    });
-
-  if (result) {
-    targetId.value = item.id;
-    name.value = result.name;
-    studentNo.value = result.studentNo;
-    newbie.value = result.newbie ? "신입생" : "재학생";
-    absence.value = result.absence ? "휴학" : "재학";
-    offPosition.value = result.offPosition;
-    defPosition.value = result.defPosition;
-    splPosition.value = result.splPosition;
-    modal.value = true;
-  }
-}
-
-async function updatePeople() {
-  const updateDTO = {
-    name: name.value,
-    studentNo: studentNo.value,
-    newbie: newbie.value === "재학생" ? false : true,
-    absence: absence.value === "재학" ? false : true,
-    offPosition: offPosition.value,
-    defPosition: defPosition.value,
-    splPosition: splPosition.value,
-  };
-
-  const result = await axiosInstance
-    .patch(`/api/admin/people/${targetId.value}`, updateDTO)
-    .then((result) => result.data)
-    .catch((error) => {
-      console.log(error);
-      errorModal.value = true;
-    })
-    .finally(() => (modal.value = false));
-
-  if (result) {
-    items.value.forEach((item) => {
-      if (item.id === targetId.value) {
-        item.name = name.value;
-        item.studentNo = studentNo.value;
-        item.offPosition = offPosition.value;
-        item.defPosition = defPosition.value;
-        item.splPosition = splPosition.value;
-      }
-    });
-    successModal.value = true;
-  }
-}
 
 watchEffect(async () => {
   const attendances: PeopleResponseDTO[] = await axiosInstance

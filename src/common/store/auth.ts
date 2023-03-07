@@ -12,6 +12,12 @@ if (import.meta.env.MODE === "production") {
     request.url = request.url?.replace("/api", "");
     return request;
   });
+} else {
+  axiosInstance.defaults.baseURL = import.meta.env.VITE_API_URL;
+  axiosInstance.interceptors.request.use((request) => {
+    request.url = request.url?.replace("/api", "");
+    return request;
+  });
 }
 
 axiosInstance.interceptors.response.use(
@@ -68,6 +74,17 @@ export const useAuthStore = defineStore("auth", {
         this.isLoggedIn = true;
       } catch (e) {
         this.isLoggedIn = false;
+      }
+    },
+
+    async getRole() {
+      try {
+        if (!this.isLoggedIn) return "Public";
+        const res = await axiosInstance.get("/api/auth/role");
+        return res.data.role;
+      } catch (e) {
+        this.isLoggedIn = false;
+        return "Public";
       }
     },
   },

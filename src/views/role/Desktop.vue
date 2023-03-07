@@ -56,7 +56,7 @@
             v-model="role"
             variant="outlined"
             label="권한"
-            :items="['Newbie', 'Normal']"
+            :items="['Newbie', 'Normal', 'Admin', 'SuperAdmin']"
           ></v-select>
           <v-btn type="submit" block class="bg-amber-lighten-2">수정하기</v-btn>
           <v-btn
@@ -93,7 +93,7 @@
     </v-dialog>
     <v-dialog v-model="errorModal" width="auto">
       <v-alert type="error" title="ERROR" border>
-        요청을 처리하는중 오류가 발생했습니다.
+        {{ errorMessage }}
       </v-alert>
     </v-dialog>
     <v-dialog v-model="successModal" width="auto">
@@ -184,6 +184,7 @@ const role = ref();
 const checkName = ref();
 const form = ref();
 const loading = ref(false);
+const errorMessage = ref("오류가 발생했습니다");
 
 async function getUpdateModal(item: BandUserResponseDTO) {
   targetId.value = item.id;
@@ -210,7 +211,10 @@ async function updatePeople() {
   const result = await axiosInstance
     .patch("/api/band/role", updateDTO)
     .then((result) => result.data)
-    .catch(() => {
+    .catch((e) => {
+      if (e.response.status === 400) {
+        errorMessage.value = e.response.data.message;
+      }
       errorModal.value = true;
       return false;
     })
@@ -236,15 +240,19 @@ async function deletePeople() {
     const result = await axiosInstance
       .delete(`/api/band/${targetId.value}`)
       .then((result) => result.data)
-      .catch(() => {
+      .catch((e) => {
+        if (e.response.status === 400) {
+          errorMessage.value = e.response.data.message;
+        }
         errorModal.value = true;
         return false;
       })
       .finally(() => (deleteModal.value = false));
 
+    loading.value = false;
+
     if (result) {
       items.value = items.value.filter((item) => item.id !== result.id);
-      loading.value = false;
       successDelete.value = true;
     }
   }
