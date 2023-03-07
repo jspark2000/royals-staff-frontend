@@ -1,0 +1,255 @@
+<template>
+  <bread-crumb :title="title" :items="breadcumbs" :icon="icon" />
+  <v-responsive class="d-flex px-5 pb-10">
+    <v-row>
+      <v-col cols="12">
+        <v-card class="pa-2" elevation="3">
+          <v-card-title class="text-indigo-darken-4"
+            >부원 명단 테이블
+            <v-card-subtitle class="d-inline px-0"
+              >| {{ season }} season</v-card-subtitle
+            ></v-card-title
+          >
+          <v-card-text class="font-weight-medium mt-lg-3">
+            <EasyDataTable
+              :headers="headers"
+              :items="items"
+              :rows-per-page="10"
+              table-class-name="attendance-table-mo"
+              theme-color="#1d90ff"
+              show-index
+              alternating
+            >
+              <template #item-modify="item">
+                <v-btn
+                  size="x-small"
+                  rounded="lg"
+                  icon="fas fa-pencil"
+                  @click="getPeopleModal(item)"
+                  class="bg-amber-lighten-2 pa-0"
+                ></v-btn>
+              </template>
+            </EasyDataTable>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-dialog v-model="modal">
+      <v-sheet class="mx-auto pa-10 w-100">
+        <v-form @submit.prevent @submit="updatePeople()">
+          <v-text-field
+            v-model="targetId"
+            variant="outlined"
+            label="id"
+            disabled
+          ></v-text-field>
+          <v-text-field
+            v-model="name"
+            variant="outlined"
+            label="이름"
+            clearable
+          ></v-text-field>
+          <v-text-field
+            v-model="studentNo"
+            variant="outlined"
+            type="number"
+            label="입학년도"
+          ></v-text-field>
+          <v-select
+            v-model="newbie"
+            variant="outlined"
+            label="구분"
+            :items="['재학생', '신입생']"
+          ></v-select>
+          <v-select
+            v-model="absence"
+            variant="outlined"
+            label="상태"
+            :items="['재학', '휴학']"
+          ></v-select>
+          <v-select
+            v-model="offPosition"
+            variant="outlined"
+            label="오펜스포지션"
+            :items="['STAFF', 'QB', 'OL', 'WR', 'RB']"
+          ></v-select>
+          <v-select
+            v-model="defPosition"
+            variant="outlined"
+            label="디펜스포지션"
+            :items="['STAFF', 'DL', 'LB', 'CB', 'HYB']"
+          ></v-select>
+          <v-select
+            v-model="splPosition"
+            variant="outlined"
+            label="스페셜포지션"
+            :items="['STAFF', 'NORMAL', 'KICKER', 'RETURNER', 'SNAPPER']"
+          ></v-select>
+          <v-btn type="submit" block class="bg-amber-lighten-2">수정하기</v-btn>
+          <v-btn @click="closeModal()" block class="mt-3 bg-green-lighten-2"
+            >뒤로가기</v-btn
+          >
+        </v-form>
+      </v-sheet>
+    </v-dialog>
+    <v-dialog v-model="errorModal" width="auto">
+      <v-alert type="error" title="ERROR" border>
+        요청을 처리하는중 오류가 발생했습니다.
+      </v-alert>
+    </v-dialog>
+    <v-dialog v-model="successModal" width="auto">
+      <v-alert type="success" title="SUCCESS" border>
+        성공적으로 업데이트 했습니다.
+      </v-alert>
+    </v-dialog>
+  </v-responsive>
+</template>
+
+<script lang="ts" setup>
+import { ref, watchEffect, Ref } from "vue";
+import BreadCrumb from "@/components/Breadcrumbs.vue";
+import { axiosInstance } from "@/common/store/auth";
+import { Header } from "vue3-easy-data-table";
+import EasyDataTable from "vue3-easy-data-table";
+
+const modal = ref(false);
+const errorModal = ref(false);
+const successModal = ref(false);
+const targetId = ref();
+const name = ref();
+const studentNo = ref();
+const newbie = ref();
+const absence = ref();
+const offPosition = ref();
+const defPosition = ref();
+const splPosition = ref();
+
+const season = ref(new Date().getFullYear());
+const icon = ref("fas fa-people-group");
+const title = ref("부원명단");
+const breadcumbs = ref([
+  {
+    title: "부원관리",
+    disabled: false,
+  },
+  {
+    title: "부원명단",
+    disabled: false,
+  },
+]);
+
+const items: Ref<PeopleResponseDTO[]> = ref([]);
+const headers: Header[] = [
+  { text: "이름", value: "name", sortable: true },
+  { text: "입학년도", value: "studentNo", sortable: true },
+  { text: "수정", value: "modify" },
+];
+
+type PeopleResponseDTO = {
+  id: number;
+  name: string;
+  studentNo: number;
+  newbie: boolean;
+  absence: boolean;
+  offPosition: string;
+  defPosition: string;
+  splPosition: string;
+};
+
+function closeModal() {
+  modal.value = false;
+}
+
+async function getPeopleModal(item: PeopleResponseDTO) {
+  const id = item.id;
+  const result: PeopleResponseDTO = await axiosInstance
+    .get(`/api/admin/people/${id}`)
+    .then((result) => result.data)
+    .catch((error) => {
+      console.log(error);
+      errorModal.value = true;
+    });
+
+  if (result) {
+    targetId.value = item.id;
+    name.value = result.name;
+    studentNo.value = result.studentNo;
+    newbie.value = result.newbie ? "신입생" : "재학생";
+    absence.value = result.absence ? "휴학" : "재학";
+    offPosition.value = result.offPosition;
+    defPosition.value = result.defPosition;
+    splPosition.value = result.splPosition;
+    modal.value = true;
+  }
+}
+
+async function updatePeople() {
+  const updateDTO = {
+    name: name.value,
+    studentNo: studentNo.value,
+    newbie: newbie.value === "재학생" ? false : true,
+    absence: absence.value === "재학" ? false : true,
+    offPosition: offPosition.value,
+    defPosition: defPosition.value,
+    splPosition: splPosition.value,
+  };
+
+  const result = await axiosInstance
+    .patch(`/api/admin/people/${targetId.value}`, updateDTO)
+    .then((result) => result.data)
+    .catch((error) => {
+      console.log(error);
+      errorModal.value = true;
+    })
+    .finally(() => (modal.value = false));
+
+  if (result) {
+    items.value.forEach((item) => {
+      if (item.id === targetId.value) {
+        item.name = name.value;
+        item.studentNo = studentNo.value;
+        item.offPosition = offPosition.value;
+        item.defPosition = defPosition.value;
+        item.splPosition = splPosition.value;
+      }
+    });
+    successModal.value = true;
+  }
+}
+
+watchEffect(async () => {
+  const attendances: PeopleResponseDTO[] = await axiosInstance
+    .get("/api/people/list")
+    .then((result) => {
+      return result.data;
+    })
+    .catch((error) => {
+      console.log(error);
+      return false;
+    });
+
+  if (attendances) {
+    items.value = attendances;
+  }
+});
+</script>
+
+<style>
+.attendance-table-mo {
+  --easy-table-header-font-size: 12px;
+  --easy-table-header-height: 50px;
+  --easy-table-header-item-padding: 10px 10px;
+
+  --easy-table-body-row-height: 50px;
+  --easy-table-body-row-font-size: 11px;
+
+  --easy-table-body-row-hover-font-color: #e8eaf6;
+  --easy-table-body-row-hover-background-color: #3949ab;
+
+  --easy-table-body-item-padding: 10px 10px;
+
+  --easy-table-rows-per-page-selector-width: 70px;
+  --easy-table-rows-per-page-selector-option-padding: 10px;
+  --easy-table-rows-per-page-selector-z-index: 1;
+}
+</style>

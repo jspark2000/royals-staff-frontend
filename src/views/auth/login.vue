@@ -42,7 +42,6 @@ const success = ref(false);
 onMounted(async () => {
   const authStore = useAuthStore();
   const route = useRoute();
-  console.log("hello");
   const code: any = route.query.code;
   try {
     await authStore.login(code);

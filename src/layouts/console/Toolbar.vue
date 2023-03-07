@@ -110,6 +110,67 @@
         ></v-list-item>
       </v-list-group>
 
+      <v-list-subheader class="font-weight-bold mt-3"
+        >관리자 기능</v-list-subheader
+      >
+      <v-list-group value="peopleAdmin">
+        <template v-slot:activator="{ props }">
+          <v-list-item v-bind="props">
+            <template v-slot:prepend>
+              <v-icon icon="fas fa-people-group" size="16px"></v-icon>
+            </template>
+            <v-list-item-title class="font-weight-medium"
+              >부원관리</v-list-item-title
+            >
+          </v-list-item>
+        </template>
+        <v-list-item
+          v-for="([title, url], i) in peopleAdmin"
+          :key="i"
+          :title="title"
+          :to="url"
+        >
+        </v-list-item>
+      </v-list-group>
+
+      <v-list-group value="attendanceAdmin">
+        <template v-slot:activator="{ props }">
+          <v-list-item v-bind="props">
+            <template v-slot:prepend>
+              <v-icon icon="fas fa-clipboard-check" size="16px"></v-icon>
+            </template>
+            <v-list-item-title class="font-weight-medium"
+              >출석관리</v-list-item-title
+            ></v-list-item
+          >
+        </template>
+        <v-list-item
+          v-for="([title, url], i) in attendanceAdmin"
+          :key="i"
+          :title="title"
+          :to="url"
+        ></v-list-item>
+      </v-list-group>
+
+      <v-list-group value="gameAdmin">
+        <template v-slot:activator="{ props }">
+          <v-list-item v-bind="props">
+            <template v-slot:prepend>
+              <v-icon icon="fas fa-football" size="16px"></v-icon>
+            </template>
+            <v-list-item-title class="font-weight-medium"
+              >시합관리</v-list-item-title
+            >
+          </v-list-item>
+        </template>
+        <v-list-item
+          v-for="([title, url], i) in gameAdmin"
+          :key="i"
+          :title="title"
+          :to="url"
+        ></v-list-item>
+      </v-list-group>
+
       <v-list-group value="role">
         <template v-slot:activator="{ props }">
           <v-list-item v-bind="props">
@@ -167,23 +228,27 @@ async function logout() {
   }
 }
 
-const people = ref([
-  ["부원명단", "/people/list"],
+const people = ref([["부원명단", "/people/list"]]);
+
+const peopleAdmin = ref([
+  ["부원정보수정", "/people/update"],
   ["부원등록", "/people/register"],
   ["부원삭제", "/people/delete"],
 ]);
 
 const attendance = ref([
-  ["출석등록", "/attendance/register"],
   ["출석명단 조회", "/attendance/list"],
   ["출석체크", "/attendance/check"],
+]);
+
+const attendanceAdmin = ref([
+  ["출석등록", "/attendance/register"],
   ["출석삭제", "/attendance/delete"],
 ]);
 
-const game = ref([
-  ["시합정보 등록", "/game/register"],
-  ["시합결과 조회", "/game/list"],
-]);
+const game = ref([["시합정보 조회", "/game/list"]]);
+
+const gameAdmin = ref([["시합정보 등록", "/game/register"]]);
 
 const role = ref([["권한변경", "/role/update"]]);
 </script>
