@@ -320,12 +320,13 @@ async function check() {
         reason: item[reasonColumn.value],
       });
     });
-    console.log(registerPayload);
   });
 
   loading.value = true;
   const result = await axiosInstance
-    .post("/api/attendance/register", registerPayload)
+    .post("/api/attendance/register", {
+      attendances: registerPayload,
+    })
     .then((result) => result.data)
     .catch((error) => {
       console.log(error);
