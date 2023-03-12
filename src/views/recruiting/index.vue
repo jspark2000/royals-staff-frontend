@@ -98,6 +98,18 @@
           </v-col>
           <v-col cols="12" class="py-2">
             <v-btn
+              prepend-icon="fas fa-phone"
+              variant="outlined"
+              class="text-white font-weight-bold"
+              size="large"
+              rounded="pill"
+              @click="() => (call = !call)"
+              block
+              >연락처</v-btn
+            >
+          </v-col>
+          <v-col cols="12" class="py-2">
+            <v-btn
               prepend-icon="fas fa-envelope"
               variant="outlined"
               class="text-white font-weight-bold"
@@ -105,7 +117,7 @@
               rounded="pill"
               href="https://forms.gle/ywwo8QS4iyhs4mA89"
               block
-              >CONTACT</v-btn
+              >CONTACT(입부신청서)</v-btn
             >
           </v-col>
           <v-col class="text-center text-white mt-6" cols="12">
@@ -171,6 +183,24 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+        <v-dialog v-model="call">
+          <v-card class="text-center">
+            <v-card-text class="font-weight-regular text-subtitle-2">
+              <h3 class="mb-3 font-weight-black">
+                <v-icon icon="fas fa-phone" size="17px"></v-icon> 연락처
+              </h3>
+              010-9756-6847 (주장 18 이창현)<br />
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                block
+                class="bg-amber-accent-3 text-white"
+                @click="call = false"
+                >닫기</v-btn
+              >
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </div>
       <v-dialog v-model="cardnews">
         <v-carousel hide-delimiters show-arrows="hover" cycle interval="5000">
@@ -190,6 +220,7 @@
 import { ref } from "vue";
 const records = ref(false);
 const cardnews = ref(false);
+const call = ref(false);
 
 const cardnewsUrls = ref([
   { src: "/cardnews/001.png" },
