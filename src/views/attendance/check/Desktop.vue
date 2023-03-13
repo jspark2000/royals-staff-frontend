@@ -49,7 +49,13 @@
                   "
                   size="small"
                 >
-                  {{ item.survey ? (item.late ? "늦참" : "참석") : "불참" }}
+                  {{
+                    item.survey === "Present"
+                      ? "참석"
+                      : item.survey === "Tardy"
+                      ? "늦참"
+                      : "불참"
+                  }}
                 </v-chip>
               </template>
               <template #item-check="item">
