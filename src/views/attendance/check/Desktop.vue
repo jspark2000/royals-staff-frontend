@@ -422,6 +422,7 @@ async function issueDailyReport() {
     const worksheetA = workbook.addWorksheet("재학생(선수)");
     const worksheetS = workbook.addWorksheet("재학생(스태프)");
     const worksheetN = workbook.addWorksheet("신입생(전체)");
+    const worksheetM = workbook.addWorksheet("출석변동인원");
 
     const columns = [
       {
@@ -437,6 +438,10 @@ async function issueDailyReport() {
         key: "location",
       },
       {
+        header: "출석조사응답",
+        key: "survey",
+      },
+      {
         header: "실제출석",
         key: "result",
       },
@@ -445,6 +450,7 @@ async function issueDailyReport() {
     worksheetA.columns = columns;
     worksheetS.columns = columns;
     worksheetN.columns = columns;
+    worksheetM.columns = columns;
 
     worksheetA.insertRows(
       2,
@@ -457,6 +463,10 @@ async function issueDailyReport() {
     worksheetN.insertRows(
       2,
       result.filter((item: any) => item.newbie === "신입생")
+    );
+    worksheetM.insertRows(
+      2,
+      result.filter((item: any) => item.survey !== item.result)
     );
 
     const buffer = await workbook.xlsx.writeBuffer();
