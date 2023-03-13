@@ -41,15 +41,21 @@
                 <v-chip
                   class="font-weight-bold"
                   :class="
-                    item.survey
-                      ? item.late
-                        ? 'bg-amber-darken-2 text-white'
-                        : 'bg-green-darken-3'
+                    item.survey === 'Present'
+                      ? 'bg-green-darken-3'
+                      : item.survey === 'Tardy'
+                      ? 'bg-amber-darken-2 text-white'
                       : 'bg-red-darken-4'
                   "
                   size="small"
                 >
-                  {{ item.survey ? (item.late ? "늦참" : "참석") : "불참" }}
+                  {{
+                    item.survey === "Present"
+                      ? "참석"
+                      : item.survey === "Tardy"
+                      ? "늦참"
+                      : "불참"
+                  }}
                 </v-chip>
               </template>
               <template #item-check="item">
@@ -256,8 +262,7 @@ type AttendanceDTO = {
   name: string;
   studentNo: number;
   location: string;
-  survey: boolean;
-  late: boolean;
+  survey: string;
   offPosition: string;
   defPosition: string;
   checked: boolean;
@@ -313,15 +318,19 @@ async function getCheckModal(item: AttendanceDTO) {
       : item.location === "Seoul"
       ? "명륜"
       : "율전";
-  actualAttendance.value = item.late ? "늦참" : item.survey ? "참석" : "불참";
+  actualAttendance.value =
+    item.survey === "Present"
+      ? "참석"
+      : item.survey === "Tardy"
+      ? "늦참"
+      : "불참";
   checkModal.value = true;
 }
 
 type AttendanceCheckDTO = {
   id: number;
   location: string;
-  late: boolean;
-  survey: boolean;
+  actual: string;
   checked: boolean;
 };
 
@@ -339,8 +348,12 @@ async function checkAttendance() {
         : targetLocation.value === "명륜"
         ? "Seoul"
         : "Suwon",
-    late: actualAttendance.value === "늦참" ? true : false,
-    survey: actualAttendance.value === "불참" ? false : true,
+    actual:
+      actualAttendance.value === "참석"
+        ? "Present"
+        : actualAttendance.value === "늦참"
+        ? "Tardy"
+        : "Absent",
     checked: true,
   };
 
@@ -378,7 +391,7 @@ function filterLocation(location: string) {
     filteredAttendanceItems.value = attendanceItems.value;
   } else if (location === "불참") {
     filteredAttendanceItems.value = attendanceItems.value.filter(
-      (attendance) => attendance.survey === false
+      (attendance) => attendance.survey === "Absent"
     );
   } else {
     filteredAttendanceItems.value = attendanceItems.value.filter(

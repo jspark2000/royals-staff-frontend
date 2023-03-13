@@ -48,15 +48,46 @@
                 <v-chip
                   class="font-weight-bold"
                   :class="
-                    item.survey
-                      ? item.late
-                        ? 'bg-amber-darken-2 text-white'
-                        : 'bg-green-darken-3'
+                    item.survey === 'Present'
+                      ? 'bg-green-darken-3'
+                      : item.survey === 'Tardy'
+                      ? 'bg-amber-darken-2 text-white'
                       : 'bg-red-darken-4'
                   "
                   size="small"
                 >
-                  {{ item.survey ? (item.late ? "늦참" : "참석") : "불참" }}
+                  {{
+                    item.survey === "Present"
+                      ? "참석"
+                      : item.survey === "Tardy"
+                      ? "늦참"
+                      : "불참"
+                  }}
+                </v-chip>
+              </template>
+              <template #item-actual="item">
+                <v-chip
+                  class="font-weight-bold"
+                  :class="
+                    item.actual
+                      ? item.actual === 'Present'
+                        ? 'bg-green-darken-3'
+                        : item.actual === 'Tardy'
+                        ? 'bg-amber-darken-2 text-white'
+                        : 'bg-red-darken-4'
+                      : 'bg-grey-darken-3'
+                  "
+                  size="small"
+                >
+                  {{
+                    item.actual
+                      ? item.actual === "Present"
+                        ? "참석"
+                        : item.actual === "Tardy"
+                        ? "늦참"
+                        : "불참"
+                      : "체크전"
+                  }}
                 </v-chip>
               </template>
             </EasyDataTable>
@@ -158,11 +189,11 @@ type AttendanceDTO = {
   id: number;
   date: string;
   name: string;
+  actual: string;
   studentNo: number;
   location: string;
   survey: boolean;
   reason: string;
-  late: boolean;
   offPosition: string;
   defPosition: string;
 };
@@ -204,6 +235,7 @@ const attendanceHeaders: Header[] = [
   { text: "학번", value: "studentNo" },
   { text: "위치", value: "location" },
   { text: "응답", value: "response" },
+  { text: "실제출석", value: "actual" },
 ];
 </script>
 

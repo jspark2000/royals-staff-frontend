@@ -308,8 +308,11 @@ async function check() {
       registerPayload.push({
         name: item[nameColumn.value],
         studentNo: item[studentNoColumn.value],
-        survey: item[dateColumn].includes("불참") ? false : true,
-        late: item[dateColumn].includes("늦참") ? true : false,
+        survey: item[dateColumn].includes("참석")
+          ? "Present"
+          : item[dateColumn].includes("늦참")
+          ? "Tardy"
+          : "Absent",
         location:
           target[0].location === "통합" || item[dateColumn].includes("불참")
             ? "Integrated"
