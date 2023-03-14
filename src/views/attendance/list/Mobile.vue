@@ -10,7 +10,15 @@
               >| {{ attendanceDate }}</v-card-subtitle
             ></v-card-title
           >
-          <v-tabs v-model="tab" bg-color="white">
+          <v-text-field
+            v-model="searchValue"
+            density="comfortable"
+            label="Search"
+            variant="solo"
+            class="ms-4 mt-3 w-50"
+            clearable
+          ></v-text-field>
+          <v-tabs v-model="tab" class="ms-4" bg-color="white">
             <v-tab value="ALL" @click="filterPosition('ALL')">전체</v-tab>
             <v-tab value="STAFF" @click="filterPosition('STAFF')">STAFF</v-tab>
             <v-tab value="QB" @click="filterPosition('QB')">QB</v-tab>
@@ -24,9 +32,11 @@
           </v-tabs>
           <v-card-text class="font-weight-medium mt-lg-3">
             <EasyDataTable
+              ref="attendanceListTable"
               :headers="attendanceHeaders"
               :items="filteredAttendanceItems"
               :rows-per-page="10"
+              :search-value="searchValue"
               table-class-name="attendance-search-table"
               theme-color="#1d90ff"
               show-index
@@ -117,6 +127,9 @@ import EasyDataTable from "vue3-easy-data-table";
 
 const tab = ref();
 
+const attendanceListTable = ref();
+const searchValue = ref();
+
 axiosInstance
   .get("/api/attendance/date-list")
   .then((result) => {
@@ -183,6 +196,7 @@ async function getAttendances(item: AttendanceDatesDTO) {
     });
 
   if (attendances) {
+    attendanceListTable.value.updatePage(1);
     attendanceDate.value = item.date.slice(0, 10);
     attendanceItems.value = attendances;
     filteredAttendanceItems.value = [...attendances];
@@ -191,6 +205,7 @@ async function getAttendances(item: AttendanceDatesDTO) {
 }
 
 function filterPosition(position: string) {
+  attendanceListTable.value.updatePage(1);
   if (position === "ALL") {
     filteredAttendanceItems.value = attendanceItems.value;
   } else {

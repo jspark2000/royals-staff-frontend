@@ -10,9 +10,18 @@
               >| {{ attendanceDate }}</v-card-subtitle
             ></v-card-title
           >
-          <v-tabs v-model="tab" bg-color="white">
+          <v-text-field
+            v-model="searchValue"
+            density="comfortable"
+            label="Search"
+            variant="solo"
+            class="ms-4 mt-3 w-50"
+            clearable
+          ></v-text-field>
+          <v-tabs v-model="tab" class="ms-4" bg-color="white">
+            <v-tab value="ALL" @click="filterLocation('ALL')">전체</v-tab>
             <v-tab value="Integrated" @click="filterLocation('Integrated')"
-              >전체</v-tab
+              >통합</v-tab
             >
             <v-tab value="Seoul" @click="filterLocation('Seoul')">명륜</v-tab>
             <v-tab value="Suwon" @click="filterLocation('Suwon')">율전</v-tab>
@@ -20,9 +29,11 @@
           </v-tabs>
           <v-card-text class="font-weight-medium mt-lg-3">
             <EasyDataTable
+              ref="attendanceCheckTableRef"
               :headers="attendanceHeaders"
               :items="filteredAttendanceItems"
               :rows-per-page="10"
+              :search-value="searchValue"
               table-class-name="attendance-check-table-mo"
               theme-color="#1d90ff"
               show-index
@@ -212,6 +223,8 @@ import ExcelJS from "exceljs";
 
 const invalid = ref(false);
 const errorMessage = ref("알 수 없는 오류 발생");
+const attendanceCheckTableRef = ref();
+const searchValue = ref();
 
 axiosInstance
   .get("/api/attendance/date-list")
@@ -278,6 +291,7 @@ async function getAttendances(item: AttendanceDatesDTO) {
     });
 
   if (attendances) {
+    attendanceCheckTableRef.value.updatePage(1);
     attendanceDate.value = item.date.slice(0, 10);
     attendanceItems.value = attendances.filter(
       (attendance) => !attendance.checked
@@ -384,11 +398,17 @@ async function checkAttendance() {
   resultModal.value = true;
 }
 
-const tab = ref("Integrated");
+const tab = ref("ALL");
 
 function filterLocation(location: string) {
-  if (location === "Integrated") {
+  attendanceCheckTableRef.value.updatePage(1);
+  if (location === "ALL") {
     filteredAttendanceItems.value = attendanceItems.value;
+  } else if (location === "Integrated") {
+    filteredAttendanceItems.value = attendanceItems.value.filter(
+      (attendance) =>
+        attendance.survey !== "Absent" && attendance.location === location
+    );
   } else if (location === "불참") {
     filteredAttendanceItems.value = attendanceItems.value.filter(
       (attendance) => attendance.survey === "Absent"
