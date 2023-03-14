@@ -10,11 +10,20 @@
               >| {{ season }} season</v-card-subtitle
             ></v-card-title
           >
-          <v-card-text class="font-weight-medium mt-lg-3">
+          <v-text-field
+            v-model="searchValue"
+            density="comfortable"
+            label="Search"
+            variant="solo"
+            class="ms-4 mt-3 w-25"
+            clearable
+          ></v-text-field>
+          <v-card-text class="font-weight-medium">
             <EasyDataTable
               :headers="headers"
               :items="items"
               :rows-per-page="10"
+              :search-value="searchValue"
               table-class-name="attendance-table"
               theme-color="#1d90ff"
               show-index
@@ -110,6 +119,8 @@ import BreadCrumb from "@/components/Breadcrumbs.vue";
 import { axiosInstance } from "@/common/store/auth";
 import { Header } from "vue3-easy-data-table";
 import EasyDataTable from "vue3-easy-data-table";
+
+const searchValue = ref();
 
 const modal = ref(false);
 const errorModal = ref(false);
